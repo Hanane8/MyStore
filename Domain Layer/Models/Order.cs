@@ -8,11 +8,12 @@ namespace Domain_Layer.Models
 {
     public class Order
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
         public User? User { get; set; }
         public DateTime OrderDate { get; set; }
         public string? Status { get; set; }
+        public decimal TotalPrice => OrderItems.Sum(item => item.TotalPrice); // Totalpris för beställningen
         public ICollection<OrderItem>? OrderItems { get; set; }
     }
 
