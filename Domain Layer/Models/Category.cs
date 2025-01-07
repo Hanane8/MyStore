@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain_Layer
+namespace Domain_Layer.Models
 {
     public class Category
     {

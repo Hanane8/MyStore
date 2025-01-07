@@ -1,8 +1,7 @@
-﻿using Domain_Layer;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain_Layer
+namespace Domain_Layer.Models
 {
     public class User : IdentityUser
     {
