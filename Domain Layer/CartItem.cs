@@ -14,6 +14,7 @@ namespace Domain_Layer
         public Guid ProductId { get; set; }
         public Product? Product { get; set; }
         public int Quantity { get; set; }
+        //comment
     }
 
 }
