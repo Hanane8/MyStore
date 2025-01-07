@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain_Layer
+namespace Domain_Layer.Models
 {
     public class Product
     {
@@ -15,7 +15,7 @@ namespace Domain_Layer
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public Guid CategoryId { get; set; }
-        public Category? Category { get; set; } 
+        public Category? Category { get; set; }
     }
 
 }

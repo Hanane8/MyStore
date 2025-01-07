@@ -18,4 +18,15 @@
     <ProjectReference Include="..\Domain Layer\Domain Layer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\CategoryCommands\" />
+    <Folder Include="Commands\ProductCommands\" />
+    <Folder Include="Commands\UserCommands\DeleteUser\" />
+    <Folder Include="Commands\UserCommands\UpdateUser\" />
+    <Folder Include="Queries\CategoryQueries\" />
+    <Folder Include="Queries\ProductQueries\" />
+    <Folder Include="Queries\UserQueries\GetUserById\" />
+    <Folder Include="Queries\UserQueries\LoginUser\" />
+  </ItemGroup>
+
 </Project>

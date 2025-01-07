@@ -1,33 +1,25 @@
-﻿using System;
+﻿using Application.DTOs.User;
+using AutoMapper;
+using Domain.Models;
+using Domain_Layer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application_Layer.DTO;
-using AutoMapper;
-using Domain_Layer;
 
-
-namespace Application_Layer.AutoMapper
+namespace Application.AutoMapper
 {
-    public class MappingProfiles: Profile
+    public class MappingProfiles : Profile
     {
-        public MappingProfiles() 
+        public MappingProfiles()
         {
-            CreateMap<User, UserDTO>();
-            CreateMap<Product, ProductDTO>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
-            CreateMap<Category, CategoryDTO>();
-            CreateMap<CartItem, CartItemDTO>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price));
-            CreateMap<Order, OrderDTO>();
-            CreateMap<OrderItem, OrderItemDTO>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-
-
+            CreateMap<AddUserDTO, User>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
         }
-
-
     }
 }
