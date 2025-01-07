@@ -1,3 +1,7 @@
+using Infrastructure_Layer;
+using Application_Layer;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastrctureLayer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+
 
 var app = builder.Build();
 
