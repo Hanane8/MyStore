@@ -1,6 +1,5 @@
-﻿using Application.DTOs.User;
+﻿using Application_Layer.DTO.UserDto;
 using AutoMapper;
-using Domain.Models;
 using Domain_Layer.Models;
 using System;
 using System.Collections.Generic;
