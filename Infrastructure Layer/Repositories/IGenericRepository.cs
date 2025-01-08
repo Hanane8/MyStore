@@ -9,10 +9,10 @@ namespace Infrastructure_Layer.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T?> GetByIdAsync(Guid id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
-        Task AddAsync(T entity);
+        Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
+        Task AddAsync(T entity, CancellationToken cancellationToken);
         void Update(T entity);
         void Remove(T entity);
     }

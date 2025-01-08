@@ -11,7 +11,7 @@ namespace Domain_Layer.Models
         public string? Address { get; set; }
         public string? Role { get; set; }
         public ICollection<Order>? Orders { get; set; } = new List<Order>();
-        public Cart Cart { get; set; }
+        public Cart? Cart { get; set; }
 
     }
 }

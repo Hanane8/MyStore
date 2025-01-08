@@ -1,12 +1,15 @@
 ﻿using Domain_Layer.Models;
 using Infrastructure_Layer.Database;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure_Layer.DatabaseHelper
 {
     public class SeedHelper
     {
+
         public static async Task SeedDataAsync(DatabaseContext context)
         {
             await context.Database.EnsureCreatedAsync();
@@ -107,6 +110,42 @@ namespace Infrastructure_Layer.DatabaseHelper
 
                 await context.SaveChangesAsync();
             }
+
+            if (!context.Users.Any())
+            {
+                var passwordHasher = new PasswordHasher<User>();
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Email = "hanane@hotmail.com",
+                        PasswordHash = "hanane123", 
+                        FirstName = "hanane",
+                        LastName = "kh",
+                        Phone = "1234567890",
+                        Address = "Götbeorg 12",
+                        Role = "Customer"
+                    },
+                    new User
+                    {
+                        Email = "maria@hotmail.com",
+                        PasswordHash = "maria123", 
+                        FirstName = "Maria",
+                        LastName = "Son",
+                        Phone = "9876543210",
+                        Address = " Stockholm 123",
+                        Role = "Admin"
+                    }
+                };
+
+                users[0].PasswordHash = passwordHasher.HashPassword(users[0], "hanane123");
+                users[1].PasswordHash = passwordHasher.HashPassword(users[1], "maria123");
+
+                context.Users.AddRange(users);
+                await context.SaveChangesAsync();
+            }
+
+
         }
     }
 }

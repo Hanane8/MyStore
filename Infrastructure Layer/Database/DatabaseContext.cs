@@ -35,14 +35,47 @@ namespace Infrastructure_Layer.Database
                 .HasForeignKey(p => p.CategoryId);
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Orders)
-                .WithOne(o => o.User)
-                .HasForeignKey(o => o.UserId);
-
-            modelBuilder.Entity<Cart>()
-                .HasMany(c => c.Items)
+                .HasOne(u => u.Cart)
                 .WithOne()
-                .HasForeignKey(ci => ci.CartId);
+                .HasForeignKey<Cart>(c => c.UserId); 
+     
+            modelBuilder.Entity<Cart>()
+                 .HasMany(c => c.Items)
+                 .WithOne()
+                 .HasForeignKey(ci => ci.CartId);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(c => c.Product)
+                .WithMany(p => p.CartItems)
+                .HasForeignKey(c => c.ProductId);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(oi => oi.ProductId);
+           
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.CartItems)
+                .WithOne(ci => ci.Product)
+                .HasForeignKey(ci => ci.ProductId);
+
+            modelBuilder.Entity<CartItem>()
+                .Property(c => c.TotalPrice)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<CartItem>()
+                .Property(c => c.UnitPrice)
+                .HasColumnType("decimal(18, 2)");
+            
+            modelBuilder.Entity<OrderItem>()
+                .Property(oi => oi.UnitPrice)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18, 2)");
+
+
         }
     }
 }

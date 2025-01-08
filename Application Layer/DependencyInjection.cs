@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application_Layer.AutoMapper;
-using AutoMapper;
-using MediatR;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation.AspNetCore;
+using AutoMapper;
+using Application_Layer.AutoMapper;
+
 
 namespace Application_Layer
 {
@@ -17,8 +14,13 @@ namespace Application_Layer
             var assembly = typeof(DependencyInjection).Assembly;
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
 
+            services.AddValidatorsFromAssembly(assembly);
 
-            services.AddAutoMapper(assembly);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfiles>();
+            });
+            services.AddSingleton(config.CreateMapper());
 
 
 

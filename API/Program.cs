@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure_Layer.DatabaseHelper;
+using Infrastructure_Layer.Database;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,8 +20,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 builder.Services.AddApplicationLayer();
-builder.Services.AddInfrastrctureLayer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddInfrastrctureLayer(builder.Configuration.GetConnectionString("DefaultConnection")!, builder.Configuration);
 
+builder.Services.AddScoped<SeedHelper>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.IncludeFields = true;
+    });
 
 builder.Services.AddAuthentication(options =>
 {
@@ -66,9 +75,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<DatabaseContext>();
+    await SeedHelper.SeedDataAsync(context);
+}
+
+
 
 
 if (app.Environment.IsDevelopment())
