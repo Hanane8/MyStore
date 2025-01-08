@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Application_Layer.Commands.UserCommands.RegisterUser
 {
-    public class RegisterUserCommand: IRequest<OperationResult<AddUserDTO>>
+    public class RegisterUserCommand: IRequest<OperationResult<string>>
     {
-        public AddUserDTO newUser { get; set; }
-        public RegisterUserCommand(AddUserDTO userToAdd)
+        public AddUserDTO NewUser { get; set; }
+        public RegisterUserCommand(AddUserDTO newUser)
         {
-            newUser = userToAdd;
+            NewUser = newUser;
         }
+
     }
 }
