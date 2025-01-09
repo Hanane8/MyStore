@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using Infrastructure_Layer.Repositories;
 using Microsoft.Extensions.Configuration;
 using Infrastructure_Layer.DatabaseHelper;
+using Application_Layer.Interfaces;
+using Application_Layer;
+using Domain_Layer.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure_Layer
 {
@@ -19,7 +23,10 @@ namespace Infrastructure_Layer
             services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<SeedHelper>();
+            services.AddTransient<PasswordHasher<User>>();
+
 
             return services;
         }

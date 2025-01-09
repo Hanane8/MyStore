@@ -1,4 +1,7 @@
 ﻿using Application_Layer.Commands.UserCommands.RegisterUser;
+using Application_Layer.DTO.UserDto;
+using Application_Layer.Queries.UserQueries.LoginUser;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +33,21 @@ namespace API.Controllers
             if (result.IsSuccessfull)
             {
                 return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO loginUserDTO)
+        {
+            var result = await _mediator.Send(new LoginUserQuery(loginUserDTO));                               
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(new {result.Message, Token = result.Data });
             }
             else
             {

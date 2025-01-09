@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentValidation.AspNetCore;
 using AutoMapper;
 using Application_Layer.AutoMapper;
+using Application_Layer.Helpers;
 
 
 namespace Application_Layer
@@ -21,8 +22,8 @@ namespace Application_Layer
                 cfg.AddProfile<MappingProfiles>();
             });
             services.AddSingleton(config.CreateMapper());
-
-
+           
+            services.AddScoped<TokenHelper>();
 
             return services;
         }
