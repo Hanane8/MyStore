@@ -1,5 +1,4 @@
-﻿using Application_Layer.Commands.ProductCommands;
-using Application_Layer.Interfaces;
+﻿using Application_Layer.Interfaces;
 using AutoMapper;
 using Domain_Layer.Models;
 using Domain_Layer.OperationResultCommand;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application_Layer.Commands.ProductCommands
+namespace Application_Layer.Commands.ProductCommands.AddProductCommands
 {
     public class AddProductCommandHandler : IRequestHandler<AddProductCommand, OperationResult<Guid>>
     {

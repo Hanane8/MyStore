@@ -1,4 +1,4 @@
-﻿using Application_Layer.DTO;
+﻿using Application_Layer.DTO.ProductDto;
 using Application_Layer.DTO.UserDto;
 using AutoMapper;
 using Domain_Layer.Models;
@@ -31,8 +31,11 @@ namespace Application_Layer.AutoMapper
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => src.Stock))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category { Name = src.CategoryName }));
 
-
-
+            CreateMap<UpdateProductDTO, Product>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
+
+
     }
+    
 }

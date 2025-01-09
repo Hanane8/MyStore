@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.Commands.ProductCommands
+namespace Application_Layer.Commands.ProductCommands.AddProductCommands
 {
     public class AddProductCommandValidator : AbstractValidator<AddProductCommand>
     {
