@@ -1,6 +1,7 @@
 ﻿using Application_Layer.Commands;
 using Application_Layer.Commands.ProductCommands;
 using Application_Layer.Commands.ProductCommands.AddProductCommands;
+using Application_Layer.Commands.ProductCommands.DeleteProductCommand;
 using Application_Layer.Commands.ProductCommands.UpdateProductCommands;
 using Application_Layer.DTO.ProductDto;
 using MediatR;
@@ -54,7 +55,20 @@ namespace API_Layer.Controllers
                 return NotFound(new { Message = "Product not found" });
             }
 
-            return Ok(new { Message = "Product updated successfully" }); // Return 204 No Content for successful update
+            return Ok(new { Message = "Product updated successfully" });
+        }
+
+        [HttpDelete("Delete/{id:guid}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand(id));
+
+            if (!result)
+            {
+                return NotFound(new { Message = $"Product with Id {id} not found." });
+            }
+
+            return Ok(new { Message = "Product deleted successfully" });
         }
     }
 }
