@@ -1,4 +1,4 @@
-﻿using Application_Layer.DTO.ProductDto;
+﻿using Application_Layer.DTO.ProductsDto;
 using MediatR;
 using System;
 using System.Collections.Generic;

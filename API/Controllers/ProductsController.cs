@@ -3,7 +3,8 @@ using Application_Layer.Commands.ProductCommands;
 using Application_Layer.Commands.ProductCommands.AddProductCommands;
 using Application_Layer.Commands.ProductCommands.DeleteProductCommand;
 using Application_Layer.Commands.ProductCommands.UpdateProductCommands;
-using Application_Layer.DTO.ProductDto;
+using Application_Layer.DTO.ProductsDto;
+using Application_Layer.Queries.ProductQueries.GetAllProduct;
 using Application_Layer.Queries.ProductQueries.GetByIdQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -83,6 +84,20 @@ namespace API_Layer.Controllers
             catch (Exception ex)
             {
                 return NotFound(new { Message = ex.Message });
+            }
+        }
+        [HttpGet ("GetAll")]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var result = await _mediator.Send(new GetAllProductsQuery());
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(new { Message = result.Message, ErrorMessage = result.ErrorMessage });
             }
         }
     }

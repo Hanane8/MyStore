@@ -32,6 +32,13 @@ namespace Infrastructure_Layer.Repositories
                                    .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
                                    .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return await _dbContext.Products
+                .Include(p => p.Category) 
+                .ToListAsync(cancellationToken);
+        }
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
