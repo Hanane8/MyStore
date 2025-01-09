@@ -18,5 +18,7 @@ namespace Application_Layer.Interfaces
         Task<IdentityResult> UpdateUserAsync(User user);
         Task<IdentityResult> DeleteUserAsync(User user);
         Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken);
+        Task<User?> GetUserByTokenAsync(string token);
     }
 }
+

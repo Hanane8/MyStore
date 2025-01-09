@@ -60,6 +60,16 @@ namespace Infrastructure_Layer.Repositories
         {
             return await tokenHelper.GenerateJwtTokenAsync(user);
         }
+        public async Task<User?> GetUserByTokenAsync(string token)
+        {
+            if (token == null)
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            var user = await _userManager.FindByLoginAsync("Token", token);
+            return user;
+        }
 
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
@@ -76,18 +86,17 @@ namespace Infrastructure_Layer.Repositories
             return await _dbContext.Users.ToListAsync(cancellationToken);
         }
 
-        //private async Task AssignRoleAsync(User user, string role)
-        //{
-        //    if (!await _userManager.IsInRoleAsync(user, role))
-        //    {
-        //        var result = await _userManager.AddToRoleAsync(user, role);
-        //        if (!result.Succeeded)
-        //        {
-        //            // Logga eller hantera fel om det behövs
-        //            Console.WriteLine($"Fel vid tilldelning av roll: {role}");
-        //        }
-        //    }
-        //}
+        private async Task AssignRoleAsync(User user, string role)
+        {
+            if (!await _userManager.IsInRoleAsync(user, role))
+            {
+                var result = await _userManager.AddToRoleAsync(user, role);
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine($"Fel vid tilldelning av roll: {role}");
+                }
+            }
+        }
 
         public async Task<IdentityResult> RemoveRoleAsync(User user, string role)
         {
