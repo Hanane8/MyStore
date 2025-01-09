@@ -6,6 +6,7 @@ using Application_Layer.Commands.ProductCommands.UpdateProductCommands;
 using Application_Layer.DTO.ProductsDto;
 using Application_Layer.Queries.ProductQueries.GetAllProduct;
 using Application_Layer.Queries.ProductQueries.GetByIdQueries;
+using Application_Layer.Queries.ProductQueries.GetProductByCategory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -99,6 +100,13 @@ namespace API_Layer.Controllers
             {
                 return BadRequest(new { Message = result.Message, ErrorMessage = result.ErrorMessage });
             }
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(Guid categoryId)
+        {
+            var products = await _mediator.Send(new GetProductsByCategoryQuery(categoryId));
+            return Ok(products);
         }
     }
 }
