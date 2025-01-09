@@ -28,7 +28,6 @@
     <Folder Include="Commands\UserCommands\DeleteUser\" />
     <Folder Include="Commands\UserCommands\UpdateUser\" />
     <Folder Include="Queries\CategoryQueries\" />
-    <Folder Include="Queries\ProductQueries\" />
     <Folder Include="Queries\UserQueries\GetUserById\" />
   </ItemGroup>
 

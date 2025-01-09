@@ -4,6 +4,7 @@ using Application_Layer.Commands.ProductCommands.AddProductCommands;
 using Application_Layer.Commands.ProductCommands.DeleteProductCommand;
 using Application_Layer.Commands.ProductCommands.UpdateProductCommands;
 using Application_Layer.DTO.ProductDto;
+using Application_Layer.Queries.ProductQueries.GetByIdQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -70,7 +71,22 @@ namespace API_Layer.Controllers
 
             return Ok(new { Message = "Product deleted successfully" });
         }
+        [HttpGet("GetById/{id:guid}")]
+        public async Task<IActionResult> GetProductById(Guid id)
+        {
+            try
+            {
+                var product = await _mediator.Send(new GetProductByIdQuery(id));
+
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
     }
 }
+
 
 
