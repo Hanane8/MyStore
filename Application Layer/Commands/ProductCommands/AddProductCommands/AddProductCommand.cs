@@ -1,4 +1,4 @@
-﻿using Application_Layer.DTO.ProductDto;
+﻿using Application_Layer.DTO.ProductsDto;
 using Domain_Layer.OperationResultCommand;
 using MediatR;
 using System;
