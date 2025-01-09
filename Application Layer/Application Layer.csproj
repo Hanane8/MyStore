@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\CategoryCommands\" />
-    <Folder Include="Commands\ProductCommands\" />
     <Folder Include="Commands\UserCommands\DeleteUser\" />
     <Folder Include="Commands\UserCommands\UpdateUser\" />
     <Folder Include="Queries\CategoryQueries\" />
