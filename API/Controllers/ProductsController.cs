@@ -1,6 +1,8 @@
 ﻿using Application_Layer.Commands;
 using Application_Layer.Commands.ProductCommands;
-using Application_Layer.DTO;
+using Application_Layer.Commands.ProductCommands.AddProductCommands;
+using Application_Layer.Commands.ProductCommands.UpdateProductCommands;
+using Application_Layer.DTO.ProductDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -35,6 +37,24 @@ namespace API_Layer.Controllers
             }
 
             return BadRequest(result);
+        }
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDTO updateProductDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var command = new UpdateProductCommand(id, updateProductDto);
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return NotFound(new { Message = "Product not found" });
+            }
+
+            return Ok(new { Message = "Product updated successfully" }); // Return 204 No Content for successful update
         }
     }
 }

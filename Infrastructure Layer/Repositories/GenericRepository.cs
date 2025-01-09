@@ -21,10 +21,11 @@ namespace Infrastructure_Layer.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<T?> GetByIdAsync<TKey>(TKey id, CancellationToken cancellationToken) where TKey : notnull
         {
             return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken);
         }
+
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
         {

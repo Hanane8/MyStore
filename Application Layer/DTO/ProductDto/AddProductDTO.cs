@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.DTO
+namespace Application_Layer.DTO.ProductDto
 {
     public class AddProductDTO
     {
@@ -12,7 +12,7 @@ namespace Application_Layer.DTO
         public string? ImageUrl { get; set; }
         public string Size { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public decimal Price { get; set; } 
+        public decimal Price { get; set; }
         public int Stock { get; set; }
         public string? CategoryName { get; set; }
         //public Guid CategoryId { get; set; }

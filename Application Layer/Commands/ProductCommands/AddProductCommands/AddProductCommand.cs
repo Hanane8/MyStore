@@ -1,4 +1,4 @@
-﻿using Application_Layer.DTO;
+﻿using Application_Layer.DTO.ProductDto;
 using Domain_Layer.OperationResultCommand;
 using MediatR;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.Commands.ProductCommands
+namespace Application_Layer.Commands.ProductCommands.AddProductCommands
 {
     public class AddProductCommand : IRequest<OperationResult<Guid>>
     {
