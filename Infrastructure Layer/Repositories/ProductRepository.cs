@@ -23,6 +23,7 @@ namespace Infrastructure_Layer.Repositories
         {
             return await _dbContext.Products
                                    .Where(p => p.CategoryId == categoryId)
+                                   .Include(p => p.Category)
                                    .ToListAsync(cancellationToken);
         }
 
