@@ -119,9 +119,12 @@ namespace Infrastructure_Layer.DatabaseHelper
                     new User
                     {
                         Email = "hanane@hotmail.com",
-                        PasswordHash = "hanane123", 
+                        PasswordHash = "Hanane123!",
                         FirstName = "hanane",
                         LastName = "kh",
+                        UserName="hanane@hotmail.com",
+                        NormalizedUserName="HANANE@HOTMAIL.COM",
+                        NormalizedEmail="HANANE@HOTMAIL.COM",
                         Phone = "1234567890",
                         Address = "Götbeorg 12",
                         Role = "Customer"
@@ -129,17 +132,20 @@ namespace Infrastructure_Layer.DatabaseHelper
                     new User
                     {
                         Email = "maria@hotmail.com",
-                        PasswordHash = "maria123", 
+                        PasswordHash = "Maria123!",
                         FirstName = "Maria",
                         LastName = "Son",
+                        UserName="maria@hotmail.com",
+                        NormalizedUserName="MARIA@HOTMAIL.COM",
+                        NormalizedEmail="MARIA@HOTMAIL.COM",
                         Phone = "9876543210",
                         Address = " Stockholm 123",
-                        Role = "Admin"
+                        Role = "Staff"
                     }
                 };
 
-                users[0].PasswordHash = passwordHasher.HashPassword(users[0], "hanane123");
-                users[1].PasswordHash = passwordHasher.HashPassword(users[1], "maria123");
+                users[0].PasswordHash = passwordHasher.HashPassword(users[0], "Hanane123!");
+                users[1].PasswordHash = passwordHasher.HashPassword(users[1], "Maria123!");
 
                 context.Users.AddRange(users);
                 await context.SaveChangesAsync();

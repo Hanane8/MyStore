@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure_Layer.DatabaseHelper;
 using Infrastructure_Layer.Database;
+using Domain_Layer.Models;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,8 +42,8 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("LKJHGFDSAZXCVBNMQWERTYUIKJHGFDSZXCVBNMNJUYTREDSAZXCVFGHJNBVC"))
@@ -74,6 +76,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DatabaseContext>()
+    .AddDefaultTokenProviders();
+
+
 
 var app = builder.Build();
 
@@ -83,8 +90,6 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<DatabaseContext>();
     await SeedHelper.SeedDataAsync(context);
 }
-
-
 
 
 if (app.Environment.IsDevelopment())
