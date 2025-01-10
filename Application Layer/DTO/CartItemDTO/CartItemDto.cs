@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.DTO
+namespace Application_Layer.DTO.CartItemDTO
 {
-    public class CartItemDTO
+    public class CartItemDto
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
         public string? ProductName { get; set; }
-        public decimal Price { get; set; }
+        public string? Size { get; set; }
+        public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
-        public decimal TotalPrice => Price * Quantity; 
+        public decimal TotalPrice => UnitPrice * Quantity;
     }
 
 }

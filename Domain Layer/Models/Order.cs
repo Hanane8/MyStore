@@ -12,7 +12,7 @@ namespace Domain_Layer.Models
         public string? UserId { get; set; }
         public User? User { get; set; }
         public DateTime OrderDate { get; set; }
-        public string? Status { get; set; }
+        public enum Status { Pending, Shipped, Delivered }
         public decimal TotalPrice => OrderItems.Sum(item => item.TotalPrice); 
         public ICollection<OrderItem>? OrderItems { get; set; }
     }
