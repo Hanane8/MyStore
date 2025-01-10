@@ -19,8 +19,6 @@ namespace Infrastructure_Layer.Repositories
         private readonly DatabaseContext _dbContext;
         private readonly PasswordHasher<User> _passwordHasher;
 
-
-        // Lägg till konstruktor för loggning om det behövs
         public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, DatabaseContext dbContext, PasswordHasher<User> passwordHasher)
         {
             _userManager = userManager;
