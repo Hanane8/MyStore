@@ -29,13 +29,14 @@ namespace Application_Layer.AutoMapper
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => src.Stock))
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category { Name = src.CategoryName }));
+                .ForMember(dest => dest.ClothingTypeId, opt => opt.MapFrom(src => src.ClothingTypeId));
 
             CreateMap<UpdateProductDTO, Product>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Product, ProductDTO>()
-            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); 
+            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.ClothingType.Category.Name))
+            .ForMember(dest => dest.ClothingTypeName, opt => opt.MapFrom(src => src.ClothingType.Name));
         }
 
     }

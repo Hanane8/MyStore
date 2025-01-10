@@ -15,7 +15,8 @@ namespace Application_Layer.DTO.ProductsDto
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string? CategoryName { get; set; }
-        //public Guid CategoryId { get; set; }
+        public string? ClothingTypeId { get; set; }
+       
     }
 
 }
