@@ -10,7 +10,7 @@ namespace Application_Layer.Interfaces
     public interface ICartRepository
     {
         Task<Cart?> GetCartByUserIdAsync(string userId, CancellationToken cancellationToken);
-        Task<Cart?> GetCartBySessionIdAsync(string sessionId, CancellationToken cancellationToken);
+        Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken);
         Task AddCartAsync(Cart cart, CancellationToken cancellationToken);
         Task SaveChangesAsync(CancellationToken cancellationToken);
     }

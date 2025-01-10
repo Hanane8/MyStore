@@ -25,6 +25,7 @@ namespace Infrastructure_Layer
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<SeedHelper>();
             services.AddTransient<PasswordHasher<User>>();
 

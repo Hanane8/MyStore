@@ -68,8 +68,10 @@ namespace Infrastructure_Layer.Database
             modelBuilder.Entity<CartItem>()
                 .Property(c => c.TotalPrice)
                 .HasColumnType("decimal(18, 2)");
+                
+     
 
-            modelBuilder.Entity<CartItem>()
+        modelBuilder.Entity<CartItem>()
                 .Property(c => c.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
             

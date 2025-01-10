@@ -26,7 +26,7 @@ namespace Infrastructure_Layer.Repositories
                     .FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
             }
 
-            public async Task<Cart?> GetCartBySessionIdAsync(string sessionId, CancellationToken cancellationToken)
+            public async Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken)
             {
                 return await _dbContext.Carts
                     .Include(c => c.Items)

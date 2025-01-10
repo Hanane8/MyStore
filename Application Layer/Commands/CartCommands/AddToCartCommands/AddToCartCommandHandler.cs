@@ -32,12 +32,13 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             {
                 cart = await _cartRepository.GetCartByUserIdAsync(cartItemDto.UserId, cancellationToken);
             }
-            else if (!string.IsNullOrEmpty(cartItemDto.SessionId))
+            else if (!string.IsNullOrEmpty(cartItemDto.SessionId.ToString()))
+
             {
-                cart = await _cartRepository.GetCartBySessionIdAsync(cartItemDto.SessionId, cancellationToken);
+                cart = await _cartRepository.GetCartBySessionIdAsync(cartItemDto.SessionId??0, cancellationToken);
             }
 
-            if (cart == null)
+                if (cart == null)
             {
                 cart = new Cart
                 {

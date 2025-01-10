@@ -54,6 +54,7 @@ namespace Application_Layer.AutoMapper
             CreateMap<CartItem, CartItemDto>();
 
             CreateMap<Cart, CartDto>();
+            CreateMap<UpdateCartItemDTO, CartItem>();
         }
 
 
