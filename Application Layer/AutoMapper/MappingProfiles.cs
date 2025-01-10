@@ -1,4 +1,6 @@
-﻿using Application_Layer.DTO.ClothingTypeDTO;
+﻿using Application_Layer.DTO.CartDTO;
+using Application_Layer.DTO.CartItemDTO;
+using Application_Layer.DTO.ClothingTypeDTO;
 using Application_Layer.DTO.ProductsDto;
 using Application_Layer.DTO.UserDto;
 using AutoMapper;
@@ -46,11 +48,16 @@ namespace Application_Layer.AutoMapper
             CreateMap<UpdateClothingTypeDTO, ClothingType>()
                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
+
+            CreateMap<AddToCartDTO, CartItem>();
+
+            CreateMap<CartItem, CartItemDto>();
+
+            CreateMap<Cart, CartDto>();
         }
 
 
     }
-
-       
+          
     
 }
