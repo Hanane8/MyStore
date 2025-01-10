@@ -13,7 +13,7 @@ namespace Domain_Layer.Models
         public DateTime CreatedDate { get; set; } 
         public List<CartItem> Items { get; set; } = new List<CartItem>(); 
         public decimal TotalPrice => Items.Sum(item => item.TotalPrice);
-        public string? SessionId { get; set; }
+        public int? SessionId { get; set; }
     }
 }
 

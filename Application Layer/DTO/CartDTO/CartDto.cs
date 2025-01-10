@@ -11,7 +11,7 @@ namespace Application_Layer.DTO.CartDTO
     {
         public int Id { get; set; }
         public string? UserId { get; set; }
-        public string? SessionId { get; set; } 
+        public int? SessionId { get; set; } 
         public List<CartItemDto> Items { get; set; } = new List<CartItemDto>();
         public decimal TotalPrice => Items.Sum(item => item.TotalPrice);
     }
