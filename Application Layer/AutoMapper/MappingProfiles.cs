@@ -1,4 +1,5 @@
-﻿using Application_Layer.DTO.ProductsDto;
+﻿using Application_Layer.DTO.ClothingTypeDTO;
+using Application_Layer.DTO.ProductsDto;
 using Application_Layer.DTO.UserDto;
 using AutoMapper;
 using Domain_Layer.Models;
@@ -37,11 +38,19 @@ namespace Application_Layer.AutoMapper
             CreateMap<Product, ProductDTO>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.ClothingType.Category.Name))
             .ForMember(dest => dest.ClothingTypeName, opt => opt.MapFrom(src => src.ClothingType.Name));
+
+            CreateMap<AddClothingTypeDTO, ClothingType>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
+            
+            CreateMap<UpdateClothingTypeDTO, ClothingType>()
+               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+               .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
         }
+
 
     }
 
-
-    
+       
     
 }

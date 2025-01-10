@@ -1,11 +1,6 @@
 ﻿using Application_Layer.Interfaces;
 using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application_Layer.Commands.ProductCommands.UpdateProductCommands
 {
@@ -26,15 +21,12 @@ namespace Application_Layer.Commands.ProductCommands.UpdateProductCommands
 
             if (product == null)
             {
-                return false; // Return false if product not found
+                return false; 
             }
-
-            // Map UpdateProductDto to the existing product
             _mapper.Map(request.ProductDto, product);
 
             _productRepository.Update(product);
             await _productRepository.SaveChangesAsync(cancellationToken);
-
 
             return true;
         }

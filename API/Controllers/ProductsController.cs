@@ -37,7 +37,7 @@ namespace API_Layer.Controllers
 
             if (result.IsSuccessfull)
             {
-                return Ok(result);
+                return Ok(result.Message);
             }
 
             return BadRequest(result);

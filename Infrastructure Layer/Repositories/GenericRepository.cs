@@ -52,5 +52,9 @@ namespace Infrastructure_Layer.Repositories
         {
             _dbContext.Set<T>().Remove(entity);
         }
+        public async Task SaveAsync(CancellationToken cancellationToken)
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 }

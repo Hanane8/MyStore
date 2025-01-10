@@ -16,5 +16,6 @@ namespace Application_Layer.Interfaces
         Task AddAsync(T entity, CancellationToken cancellationToken);
         void Update(T entity);
         void Remove(T entity);
+        Task SaveAsync(CancellationToken cancellationToken);
     }
 }
