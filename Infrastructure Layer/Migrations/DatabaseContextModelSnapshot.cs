@@ -97,6 +97,25 @@ namespace Infrastructure_Layer.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Domain_Layer.Models.ClothingType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("ClothingTypes");
+                });
+
             modelBuilder.Entity("Domain_Layer.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -159,7 +178,7 @@ namespace Infrastructure_Layer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("ClothingTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -185,7 +204,7 @@ namespace Infrastructure_Layer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ClothingTypeId");
 
                     b.ToTable("Products");
                 });
@@ -425,6 +444,17 @@ namespace Infrastructure_Layer.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Domain_Layer.Models.ClothingType", b =>
+                {
+                    b.HasOne("Domain_Layer.Models.Category", "Category")
+                        .WithMany("ClothingTypes")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Domain_Layer.Models.Order", b =>
                 {
                     b.HasOne("Domain_Layer.Models.User", "User")
@@ -453,13 +483,11 @@ namespace Infrastructure_Layer.Migrations
 
             modelBuilder.Entity("Domain_Layer.Models.Product", b =>
                 {
-                    b.HasOne("Domain_Layer.Models.Category", "Category")
+                    b.HasOne("Domain_Layer.Models.ClothingType", "ClothingType")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClothingTypeId");
 
-                    b.Navigation("Category");
+                    b.Navigation("ClothingType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -519,6 +547,11 @@ namespace Infrastructure_Layer.Migrations
                 });
 
             modelBuilder.Entity("Domain_Layer.Models.Category", b =>
+                {
+                    b.Navigation("ClothingTypes");
+                });
+
+            modelBuilder.Entity("Domain_Layer.Models.ClothingType", b =>
                 {
                     b.Navigation("Products");
                 });

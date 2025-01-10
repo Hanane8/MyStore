@@ -39,6 +39,20 @@ namespace Infrastructure_Layer.DatabaseHelper
                 };
 
                 context.Categories.AddRange(categories);
+                await context.SaveChangesAsync();
+
+                var clothingTypes = new List<ClothingType>
+                    {
+                        new ClothingType { Id = Guid.NewGuid(), Name = "T-Shirt", CategoryId = categories[0].Id },
+                        new ClothingType { Id = Guid.NewGuid(), Name = "Jeans", CategoryId = categories[0].Id },
+                        new ClothingType { Id = Guid.NewGuid(), Name = "Blouse", CategoryId = categories[1].Id },
+                        new ClothingType { Id = Guid.NewGuid(), Name = "Skirt", CategoryId = categories[1].Id },
+                        new ClothingType { Id = Guid.NewGuid(), Name = "Hoodie", CategoryId = categories[2].Id },
+                        new ClothingType { Id = Guid.NewGuid(), Name = "Shorts", CategoryId = categories[2].Id }
+                    };
+
+                context.ClothingTypes.AddRange(clothingTypes);
+                await context.SaveChangesAsync();
 
                 var products = new List<Product>
                 {
@@ -50,7 +64,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 19.99m,
                         Stock = 50,
                         ImageUrl = "https://images.unsplash.com/photo-1602810317284-2f71990b17cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[0].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "T-Shirt").Id
                     },
                     new Product
                     {
@@ -60,7 +74,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 49.99m,
                         Stock = 30,
                         ImageUrl = "https://images.unsplash.com/photo-1603782142209-d017e4a3cbf4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[0].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "Jeans").Id
                     },
 
                     new Product
@@ -71,7 +85,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 29.99m,
                         Stock = 40,
                         ImageUrl = "https://images.unsplash.com/photo-1520971545331-b1c00e103e13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[1].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "Blouse").Id
                     },
                     new Product
                     {
@@ -81,7 +95,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 39.99m,
                         Stock = 20,
                         ImageUrl = "https://images.unsplash.com/photo-1550831107-ded5b1c15550?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[1].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "Skirt").Id
                     },
 
                     new Product
@@ -92,7 +106,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 24.99m,
                         Stock = 60,
                         ImageUrl = "https://images.unsplash.com/photo-1595361799459-e491a819ee4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[2].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "Hoodie").Id
                     },
                     new Product
                     {
@@ -102,7 +116,7 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Price = 14.99m,
                         Stock = 70,
                         ImageUrl = "https://images.unsplash.com/photo-1600417096443-69fa4f6dbaca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
-                        CategoryId = categories[2].Id
+                        ClothingTypeId = clothingTypes.First(ct => ct.Name == "Shorts").Id
                     }
                 };
 
@@ -143,15 +157,13 @@ namespace Infrastructure_Layer.DatabaseHelper
                         Role = "Staff"
                     }
                 };
-
+                
                 users[0].PasswordHash = passwordHasher.HashPassword(users[0], "Hanane123!");
                 users[1].PasswordHash = passwordHasher.HashPassword(users[1], "Maria123!");
 
                 context.Users.AddRange(users);
                 await context.SaveChangesAsync();
             }
-
-
         }
     }
 }

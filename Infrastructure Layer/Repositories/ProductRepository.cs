@@ -22,9 +22,10 @@ namespace Infrastructure_Layer.Repositories
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
         {
             return await _dbContext.Products
-                                   .Where(p => p.CategoryId == categoryId)
-                                   .Include(p => p.Category)
-                                   .ToListAsync(cancellationToken);
+                 .Include(p => p.ClothingType)
+                 .ThenInclude(ct => ct.Category)
+                 .Where(p => p.ClothingType.CategoryId == categoryId)
+                 .ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice, CancellationToken cancellationToken)
@@ -34,12 +35,14 @@ namespace Infrastructure_Layer.Repositories
                                    .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Product>> GetByClothingTypeIdAsync(Guid clothingTypeId, CancellationToken cancellationToken)
         {
             return await _dbContext.Products
-                .Include(p => p.Category) 
+                .Include(p => p.ClothingType) 
+                .Where(p => p.ClothingTypeId == clothingTypeId)
                 .ToListAsync(cancellationToken);
         }
+
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
             await _dbContext.SaveChangesAsync(cancellationToken);

@@ -19,6 +19,7 @@ namespace Infrastructure_Layer.Database
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<ClothingType> ClothingTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,9 +31,14 @@ namespace Infrastructure_Layer.Database
                 .HasForeignKey(oi => oi.OrderId);
 
             modelBuilder.Entity<Category>()
-                .HasMany(c => c.Products)
-                .WithOne(p => p.Category)
-                .HasForeignKey(p => p.CategoryId);
+                .HasMany(c => c.ClothingTypes)
+                .WithOne(ct => ct.Category)
+                .HasForeignKey(ct => ct.CategoryId);
+
+            modelBuilder.Entity<ClothingType>()
+                .HasMany(ct => ct.Products)
+                .WithOne(p => p.ClothingType)
+                .HasForeignKey(p => p.ClothingTypeId);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Cart)
