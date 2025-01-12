@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Commands\CategoryCommands\**" />
+    <Compile Remove="Queries\CategoryQueries\**" />
+    <EmbeddedResource Remove="Commands\CategoryCommands\**" />
+    <EmbeddedResource Remove="Queries\CategoryQueries\**" />
+    <None Remove="Commands\CategoryCommands\**" />
+    <None Remove="Queries\CategoryQueries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
@@ -24,11 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\CategoryCommands\" />
     <Folder Include="Commands\UserCommands\DeleteUser\" />
     <Folder Include="Commands\UserCommands\UpdateUser\" />
-    <Folder Include="Queries\CategoryQueries\" />
-    <Folder Include="Queries\ClothingType\" />
     <Folder Include="Queries\UserQueries\GetUserById\" />
   </ItemGroup>
 

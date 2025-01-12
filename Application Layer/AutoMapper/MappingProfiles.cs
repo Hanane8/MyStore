@@ -1,6 +1,7 @@
 ﻿using Application_Layer.DTO.CartDTO;
 using Application_Layer.DTO.CartItemDTO;
 using Application_Layer.DTO.ClothingTypeDTO;
+using Application_Layer.DTO.OrderDTO;
 using Application_Layer.DTO.ProductsDto;
 using Application_Layer.DTO.UserDto;
 using AutoMapper;
@@ -54,11 +55,17 @@ namespace Application_Layer.AutoMapper
             CreateMap<CartItem, CartItemDto>();
 
             CreateMap<Cart, CartDto>();
+
             CreateMap<UpdateCartItemDTO, CartItem>();
+
+            CreateMap<CheckoutDto, Order>()
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => Order.Status.Pending))
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.CartItems));
+
+            CreateMap<CartItemDto, OrderItem>()
+                .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice));
         }
-
-
     }
-          
+            
     
 }
