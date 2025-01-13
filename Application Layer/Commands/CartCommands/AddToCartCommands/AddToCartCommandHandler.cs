@@ -14,12 +14,14 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
     public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, OperationResult<Guid>>
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IGenericRepository<Product> _productRepository;
         private readonly IMapper _mapper;
 
-        public AddToCartCommandHandler(ICartRepository cartRepository, IMapper mapper)
+        public AddToCartCommandHandler(ICartRepository cartRepository, IMapper mapper, IGenericRepository<Product> productRepository)
         {
             _cartRepository = cartRepository;
             _mapper = mapper;
+            _productRepository = productRepository;
         }
 
         public async Task<OperationResult<Guid>> Handle(AddToCartCommand request, CancellationToken cancellationToken)
@@ -54,10 +56,18 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             if (existingItem != null)
             {
                 existingItem.Quantity += cartItemDto.Quantity;
+                existingItem.SetTotalPrice();
             }
             else
             {
+                var product = await _productRepository.GetByIdAsync(cartItemDto.ProductId, cancellationToken);
+                if (product == null)
+                {
+                    throw new Exception("Produkten kunde inte hittas.");
+                }
                 var newCartItem = _mapper.Map<CartItem>(cartItemDto);
+                newCartItem.UnitPrice = product.Price;
+                newCartItem.SetTotalPrice();
                 cart.Items.Add(newCartItem);
             }
 
