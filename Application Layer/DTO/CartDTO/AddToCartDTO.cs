@@ -11,7 +11,7 @@ namespace Application_Layer.DTO.CartDTO
         public Guid ProductId { get; set; }
         public string Size { get; set; } = string.Empty;
         public int Quantity { get; set; }
-        public string? UserId { get; internal set; }
+        public string? UserId { get; set; }
         public int? SessionId { get; internal set; }
     }
 }
