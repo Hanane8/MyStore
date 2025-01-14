@@ -15,7 +15,6 @@ namespace Application_Layer.DTO.OrderDTO
         public string? Size { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public decimal TotalPrice => Price * Quantity;
     }
 
 }
