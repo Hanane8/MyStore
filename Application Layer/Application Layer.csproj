@@ -9,11 +9,8 @@
 
   <ItemGroup>
     <Compile Remove="Commands\CategoryCommands\**" />
-    <Compile Remove="Queries\CategoryQueries\**" />
     <EmbeddedResource Remove="Commands\CategoryCommands\**" />
-    <EmbeddedResource Remove="Queries\CategoryQueries\**" />
     <None Remove="Commands\CategoryCommands\**" />
-    <None Remove="Queries\CategoryQueries\**" />
   </ItemGroup>
 
   <ItemGroup>
