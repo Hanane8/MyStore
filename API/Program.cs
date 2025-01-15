@@ -82,9 +82,21 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3001")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 
 var app = builder.Build();
+
+app.UseCors("AllowReactApp"); 
 
 using (var scope = app.Services.CreateScope())
 {
@@ -96,6 +108,7 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
