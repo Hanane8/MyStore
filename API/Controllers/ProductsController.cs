@@ -8,6 +8,7 @@ using Application_Layer.Queries.ProductQueries.GetAllProduct;
 using Application_Layer.Queries.ProductQueries.GetByIdQueries;
 using Application_Layer.Queries.ProductQueries.GetProductByCategory;
 using Application_Layer.Queries.ProductQueries.GetProductsByCategoryName;
+using Application_Layer.Queries.ProductQueries.GetProductsByClothingType;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -121,6 +122,21 @@ namespace API_Layer.Controllers
             var products = await _mediator.Send(query);
 
             return Ok(products);
+        }
+        [HttpGet("by-clothing-type/{clothingTypeId:guid}")]
+        public async Task<IActionResult> GetProductsByClothingType(Guid clothingTypeId)
+        {
+            var query = new GetProductsByClothingTypeQuery(clothingTypeId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(new { Message = result.Message, ErrorMessage = result.ErrorMessage });
+            }
         }
     }
 }
