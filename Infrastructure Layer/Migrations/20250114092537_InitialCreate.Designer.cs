@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure_Layer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250113215211_InitialCreate")]
+    [Migration("20250114092537_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -130,6 +130,10 @@ namespace Infrastructure_Layer.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -159,6 +163,10 @@ namespace Infrastructure_Layer.Migrations
 
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18, 2)");

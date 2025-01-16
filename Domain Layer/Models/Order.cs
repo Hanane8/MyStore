@@ -13,8 +13,14 @@ namespace Domain_Layer.Models
         public User? User { get; set; }
         public DateTime OrderDate { get; set; }
         public  Status OrderStatus { get; set; }
-        public decimal TotalPrice => OrderItems.Sum(item => item.TotalPrice); 
+        public decimal TotalAmount { get; set; }
         public ICollection<OrderItem>? OrderItems { get; set; }
+
+        public void SetTotalAmount()
+        {
+            TotalAmount = OrderItems.Sum(item => item.TotalPrice);
+        }
+
 
 
         public enum Status
