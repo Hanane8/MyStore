@@ -47,5 +47,13 @@ namespace Infrastructure_Layer.Repositories
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        public async Task<IEnumerable<Product>> GetProductsByCategoryNameAsync(string categoryName)
+        {
+            return await _dbContext.Products
+                 .Include(p => p.ClothingType)
+                 .ThenInclude(ct => ct.Category)
+                 .Where(p => p.ClothingType.Category.Name == categoryName)
+                 .ToListAsync();
+        }
     }
 }
