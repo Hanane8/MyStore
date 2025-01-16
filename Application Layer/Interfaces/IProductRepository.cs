@@ -12,6 +12,8 @@ namespace Application_Layer.Interfaces
         Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
         Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice, CancellationToken cancellationToken);
         Task SaveChangesAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<Product>> GetByClothingTypeIdAsync(Guid clothingTypeId, CancellationToken cancellationToken);
+
         Task<IEnumerable<Product>> GetProductsByCategoryNameAsync(string categoryName);
     }
 }
