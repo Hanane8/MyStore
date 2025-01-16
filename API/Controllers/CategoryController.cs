@@ -1,5 +1,6 @@
 ﻿using Application_Layer.Queries.CategoryQueries.GetAllCategories;
 using Application_Layer.Queries.CategoryQueries.GetCategoryById;
+using Application_Layer.Queries.CategoryQueries.GetCategoryByName;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,22 @@ namespace API.Controllers
 
             return BadRequest(result.ErrorMessage);
         }
-    }
 
+        [HttpGet("GetByName/{name}")]
+        public async Task<IActionResult> GetCategoryByName(string name, CancellationToken cancellationToken)
+        {
+            var query = new GetCategoryByNameQuery(name);
+            var result = await _mediator.Send(query, cancellationToken);
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+    }
 }
+    
+
+

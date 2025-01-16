@@ -38,10 +38,8 @@ namespace Application_Layer.AutoMapper
             CreateMap<UpdateProductDTO, Product>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<Product, ProductDTO>()
-            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.ClothingType.Category.Name))
-            .ForMember(dest => dest.ClothingTypeName, opt => opt.MapFrom(src => src.ClothingType.Name));
-
+            CreateMap<Product, ProductDTO>();
+           
             CreateMap<AddClothingTypeDTO, ClothingType>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));

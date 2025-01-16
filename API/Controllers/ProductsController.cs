@@ -7,6 +7,7 @@ using Application_Layer.DTO.ProductsDto;
 using Application_Layer.Queries.ProductQueries.GetAllProduct;
 using Application_Layer.Queries.ProductQueries.GetByIdQueries;
 using Application_Layer.Queries.ProductQueries.GetProductByCategory;
+using Application_Layer.Queries.ProductQueries.GetProductsByCategoryName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -106,6 +107,19 @@ namespace API_Layer.Controllers
         public async Task<IActionResult> GetProductsByCategory(Guid categoryId)
         {
             var products = await _mediator.Send(new GetProductsByCategoryQuery(categoryId));
+            return Ok(products);
+        }
+        [HttpGet("by-category-name")]
+        public async Task<IActionResult> GetProductsByCategoryName([FromQuery] string categoryName)
+        {
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                return BadRequest("Category name must be provided.");
+            }
+
+            var query = new GetProductsByCategoryNameQuery(categoryName);
+            var products = await _mediator.Send(query);
+
             return Ok(products);
         }
     }
