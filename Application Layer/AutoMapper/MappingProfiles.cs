@@ -58,7 +58,11 @@ namespace Application_Layer.AutoMapper
 
             CreateMap<CheckoutDto, Order>()
                 .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => Order.Status.Pending))
-                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.CartItems));
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.CartItems))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.Mobile, opt => opt.MapFrom(src => src.Mobile))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
 
             CreateMap<CartItemDto, OrderItem>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))

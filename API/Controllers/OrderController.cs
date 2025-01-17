@@ -17,11 +17,11 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create")] 
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
             try
-            {
+            { 
                 var result = await _mediator.Send(command);
 
                 if (result.IsSuccessfull)

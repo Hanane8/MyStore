@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application_Layer.Queries.UserQueries.LoginUser
 {
-    public class LoginUserQuery : IRequest<OperationResult<string>>
+    public class LoginUserQuery : IRequest<OperationResult<LoginUserResultDto>>
     {
         public LoginUserDTO LoginUserDTO { get; set; }
 
