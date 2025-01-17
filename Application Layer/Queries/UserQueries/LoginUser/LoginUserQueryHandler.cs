@@ -11,10 +11,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Application_Layer.Interfaces;
+using Application_Layer.DTO.UserDto;
 
 namespace Application_Layer.Queries.UserQueries.LoginUser
 {
-    public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, OperationResult<string>>
+    public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, OperationResult<LoginUserResultDto>>
     {
         private readonly  IUserRepository _userRepository;
         private readonly TokenHelper _tokenHelper;
@@ -25,22 +26,30 @@ namespace Application_Layer.Queries.UserQueries.LoginUser
             _tokenHelper = tokenHelper;
         }
 
-        public async Task<OperationResult<string>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<LoginUserResultDto>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.FindByEmailAsync(request.LoginUserDTO?.Email);
             if (user == null)
             {
-                return OperationResult<string>.Failure("Felaktig e-post.");
+                return OperationResult<LoginUserResultDto>.Failure("Felaktig e-post.");
             }
 
             var passwordResult = await _userRepository.VerifyPasswordAsync(user.Email, request.LoginUserDTO.Password);
             if (!passwordResult)
             {
-                return OperationResult<string>.Failure("Felaktig lösenord.");
+                return OperationResult<LoginUserResultDto>.Failure("Felaktig lösenord.");
             }
 
             var token = await _userRepository.GenerateJwtTokenAsync(user, _tokenHelper);
-            return OperationResult<string>.Successfull(token);
+            var result = new LoginUserResultDto
+            {
+                Token = token,
+                UserId = user.Id,
+                Message = "Login successful."
+            };
+
+            return OperationResult<LoginUserResultDto>.Successfull(result);
         }
     }
+    
 }

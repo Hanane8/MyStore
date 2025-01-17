@@ -40,7 +40,7 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
                 cart = await _cartRepository.GetCartBySessionIdAsync(cartItemDto.SessionId??0, cancellationToken);
             }
 
-                if (cart == null)
+            if (cart == null)
             {
                 cart = new Cart
                 {
@@ -48,6 +48,14 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
                     SessionId = cartItemDto.SessionId
                 };
                 await _cartRepository.AddCartAsync(cart, cancellationToken);
+            }
+            else
+            {
+                // Update UserId in case it was null previously
+                if (string.IsNullOrEmpty(cart.UserId) && !string.IsNullOrEmpty(cartItemDto.UserId))
+                {
+                    cart.UserId = cartItemDto.UserId;
+                }
             }
 
             var existingItem = cart.Items.FirstOrDefault(

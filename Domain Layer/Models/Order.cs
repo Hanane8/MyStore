@@ -15,6 +15,9 @@ namespace Domain_Layer.Models
         public  Status OrderStatus { get; set; }
         public decimal TotalAmount { get; set; }
         public ICollection<OrderItem>? OrderItems { get; set; }
+        public string? Address { get; set; }
+        public string? Mobile { get; set; }
+        public string? FullName { get; set; }
 
         public void SetTotalAmount()
         {

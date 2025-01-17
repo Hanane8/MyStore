@@ -36,24 +36,23 @@ namespace Application_Layer.Commands.OrderCommands
                     return OperationResult<Guid>.Failure("CartItems cannot be empty.");
                 }
 
-                var newOrder = new Order
+                var newOrder = _mapper.Map<Order>(checkout);
+                newOrder.OrderDate = DateTime.UtcNow;
+                newOrder.OrderStatus = Order.Status.Pending;
+
+
+                newOrder.OrderItems = cart.Items.Select(cartItem =>
                 {
-                    UserId = checkout.UserId,
-                    OrderDate = DateTime.UtcNow,
-                    OrderStatus = Order.Status.Pending,
-                    OrderItems = _mapper.Map<List<OrderItem>>(checkout.CartItems)
-                };
-                
-                foreach (var orderItem in newOrder.OrderItems)
-                {
-                    var cartItem = cart.Items.FirstOrDefault(ci => ci.ProductId == orderItem.ProductId && ci.Size == orderItem.Size);
-                    if (cartItem != null)
+                    var orderItem = new OrderItem
                     {
-                        orderItem.Quantity = cartItem.Quantity;
-                        orderItem.UnitPrice = cartItem.UnitPrice;
-                        orderItem.SetTotalPrice();
-                    }
-                }
+                        ProductId = cartItem.ProductId,
+                        Quantity = cartItem.Quantity,
+                        Size = cartItem.Size,
+                        UnitPrice = cartItem.UnitPrice
+                    };
+                    orderItem.SetTotalPrice();
+                    return orderItem;
+                }).ToList();
 
                 newOrder.SetTotalAmount();
 
