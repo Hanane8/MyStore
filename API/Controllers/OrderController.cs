@@ -1,6 +1,7 @@
 ﻿using Application_Layer.Commands.OrderCommands;
 using Application_Layer.Queries.OrderQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,8 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("create")] 
+        [HttpPost("create")]
+        [Authorize]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
             try

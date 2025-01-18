@@ -51,7 +51,7 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             }
             else
             {
-                // Update UserId in case it was null previously
+               
                 if (string.IsNullOrEmpty(cart.UserId) && !string.IsNullOrEmpty(cartItemDto.UserId))
                 {
                     cart.UserId = cartItemDto.UserId;
@@ -59,7 +59,7 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             }
 
             var existingItem = cart.Items.FirstOrDefault(
-                item => item.ProductId == cartItemDto.ProductId && item.Size == cartItemDto.Size);
+                item => item.ProductId == cartItemDto.ProductId);
 
             if (existingItem != null)
             {
@@ -75,6 +75,7 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
                 }
                 var newCartItem = _mapper.Map<CartItem>(cartItemDto);
                 newCartItem.UnitPrice = product.Price;
+                newCartItem.Size = product.Size;
                 newCartItem.SetTotalPrice();
                 cart.Items.Add(newCartItem);
             }

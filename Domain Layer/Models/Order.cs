@@ -11,6 +11,8 @@ namespace Domain_Layer.Models
         public Guid Id { get; set; }
         public string? UserId { get; set; }
         public User? User { get; set; }
+        public Guid CartId { get; set; }
+        public Cart? Cart { get; set; }
         public DateTime OrderDate { get; set; }
         public  Status OrderStatus { get; set; }
         public decimal TotalAmount { get; set; }

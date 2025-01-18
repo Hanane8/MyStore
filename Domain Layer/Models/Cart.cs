@@ -10,10 +10,13 @@ namespace Domain_Layer.Models
     {
         public Guid Id { get; set; } 
         public string? UserId { get; set; } 
+        public User? User { get; set; }
         public DateTime CreatedDate { get; set; } 
-        public List<CartItem> Items { get; set; } = new List<CartItem>(); 
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
         public decimal TotalPrice => Items.Sum(item => item.TotalPrice);
         public int? SessionId { get; set; }
+        public Order? Order { get; set; }
     }
 }
 

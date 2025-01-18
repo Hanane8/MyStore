@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure_Layer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250117094151_InitialCreate")]
+    [Migration("20250118001205_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -127,6 +127,12 @@ namespace Infrastructure_Layer.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CartId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
@@ -140,13 +146,18 @@ namespace Infrastructure_Layer.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("CartId1")
+                        .IsUnique()
+                        .HasFilter("[CartId1] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -174,8 +185,7 @@ namespace Infrastructure_Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18, 2)");
@@ -236,6 +246,9 @@ namespace Infrastructure_Layer.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -441,22 +454,28 @@ namespace Infrastructure_Layer.Migrations
 
             modelBuilder.Entity("Domain_Layer.Models.Cart", b =>
                 {
-                    b.HasOne("Domain_Layer.Models.User", null)
+                    b.HasOne("Domain_Layer.Models.User", "User")
                         .WithOne("Cart")
-                        .HasForeignKey("Domain_Layer.Models.Cart", "UserId");
+                        .HasForeignKey("Domain_Layer.Models.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain_Layer.Models.CartItem", b =>
                 {
-                    b.HasOne("Domain_Layer.Models.Cart", null)
+                    b.HasOne("Domain_Layer.Models.Cart", "Cart")
                         .WithMany("Items")
-                        .HasForeignKey("CartId");
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain_Layer.Models.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Cart");
 
                     b.Navigation("Product");
                 });
@@ -474,16 +493,28 @@ namespace Infrastructure_Layer.Migrations
 
             modelBuilder.Entity("Domain_Layer.Models.Order", b =>
                 {
+                    b.HasOne("Domain_Layer.Models.Cart", "Cart")
+                        .WithMany("Orders")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain_Layer.Models.Cart", null)
+                        .WithOne("Order")
+                        .HasForeignKey("Domain_Layer.Models.Order", "CartId1");
+
                     b.HasOne("Domain_Layer.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Cart");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain_Layer.Models.OrderItem", b =>
                 {
-                    b.HasOne("Domain_Layer.Models.Order", null)
+                    b.HasOne("Domain_Layer.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -494,6 +525,8 @@ namespace Infrastructure_Layer.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -561,6 +594,10 @@ namespace Infrastructure_Layer.Migrations
             modelBuilder.Entity("Domain_Layer.Models.Cart", b =>
                 {
                     b.Navigation("Items");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Domain_Layer.Models.Category", b =>
