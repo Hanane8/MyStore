@@ -1,11 +1,6 @@
 ﻿using Domain_Layer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure_Layer.Database
 {
@@ -25,10 +20,32 @@ namespace Infrastructure_Layer.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            // Order-OrderItem (One-to-Many)
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItems)
-                .WithOne()
-                .HasForeignKey(oi => oi.OrderId);
+                .WithOne(oi => oi.Order)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // User-Order (One-to-Many)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId);
+
+            // Cart-Order (One-to-One)
+            modelBuilder.Entity<Cart>()
+                .HasMany(c => c.Orders)
+                .WithOne(o => o.Cart)
+                .HasForeignKey(o => o.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Cart)
+                .WithOne(c => c.User)
+                .HasForeignKey<Cart>(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.ClothingTypes)
@@ -40,47 +57,41 @@ namespace Infrastructure_Layer.Database
                 .WithOne(p => p.ClothingType)
                 .HasForeignKey(p => p.ClothingTypeId);
 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Cart)
-                .WithOne()
-                .HasForeignKey<Cart>(c => c.UserId); 
-     
             modelBuilder.Entity<Cart>()
-                 .HasMany(c => c.Items)
-                 .WithOne()
-                 .HasForeignKey(ci => ci.CartId);
+                .HasMany(c => c.Items)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // CartItem-Product (Many-to-One)
             modelBuilder.Entity<CartItem>()
-                .HasOne(c => c.Product)
+                .HasOne(ci => ci.Product)
                 .WithMany(p => p.CartItems)
-                .HasForeignKey(c => c.ProductId);
+                .HasForeignKey(ci => ci.ProductId);
 
+            // OrderItem-Product (Many-to-One)
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Product)
                 .WithMany(p => p.OrderItems)
                 .HasForeignKey(oi => oi.ProductId);
-           
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.CartItems)
-                .WithOne(ci => ci.Product)
-                .HasForeignKey(ci => ci.ProductId);
 
+            // Configure financial precision
             modelBuilder.Entity<CartItem>()
-                .Property(c => c.TotalPrice)
+                .Property(ci => ci.TotalPrice)
                 .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<Order>()
-               .Property(o => o.TotalAmount)
-               .HasPrecision(18, 2);
+                .Property(o => o.TotalAmount)
+                .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<OrderItem>()
-               .Property(oi => oi.TotalPrice)
-               .HasPrecision(18, 2);
+                .Property(oi => oi.TotalPrice)
+                .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<CartItem>()
-                .Property(c => c.UnitPrice)
+                .Property(ci => ci.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
-            
+
             modelBuilder.Entity<OrderItem>()
                 .Property(oi => oi.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
@@ -88,8 +99,7 @@ namespace Infrastructure_Layer.Database
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18, 2)");
-
-
         }
+
     }
 }

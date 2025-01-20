@@ -9,6 +9,7 @@ using Infrastructure_Layer.DatabaseHelper;
 using Infrastructure_Layer.Database;
 using Domain_Layer.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,7 +88,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000")
+            builder.WithOrigins("http://localhost:3002")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                     .AllowCredentials();
@@ -117,7 +118,7 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty;
     });
 }
-
+app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

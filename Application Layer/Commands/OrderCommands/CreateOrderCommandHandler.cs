@@ -36,26 +36,30 @@ namespace Application_Layer.Commands.OrderCommands
                     return OperationResult<Guid>.Failure("CartItems cannot be empty.");
                 }
 
-                var newOrder = _mapper.Map<Order>(checkout);
-                newOrder.OrderDate = DateTime.UtcNow;
-                newOrder.OrderStatus = Order.Status.Pending;
-
-
-                newOrder.OrderItems = cart.Items.Select(cartItem =>
+                var newOrder = new Order
                 {
-                    var orderItem = new OrderItem
+                    UserId = cart.UserId,
+                    CartId = cart.Id,
+                    OrderDate = DateTime.UtcNow,
+                    OrderStatus = Order.Status.Pending,
+                    Address = checkout.Address,
+                    Mobile = checkout.Mobile,
+                    FullName = checkout.FullName,
+                    OrderItems = cart.Items.Select(cartItem =>
                     {
-                        ProductId = cartItem.ProductId,
-                        Quantity = cartItem.Quantity,
-                        Size = cartItem.Size,
-                        UnitPrice = cartItem.UnitPrice
-                    };
-                    orderItem.SetTotalPrice();
-                    return orderItem;
-                }).ToList();
+                        var orderItem = new OrderItem
+                        {
+                            ProductId = cartItem.ProductId,
+                            Quantity = cartItem.Quantity,
+                            Size = cartItem.Size,
+                            UnitPrice = cartItem.UnitPrice
+                        };
+                        orderItem.SetTotalPrice();
+                        return orderItem;
+                    }).ToList()
+                };
 
                 newOrder.SetTotalAmount();
-
 
                 await _orderRepository.AddAsync(newOrder, cancellationToken);
                 cart.Items.Clear();
