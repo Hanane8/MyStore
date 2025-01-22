@@ -3,8 +3,10 @@ using Application_Layer.Commands.CartCommands.UpdateCartCommands;
 using Application_Layer.DTO.CartDTO;
 using Application_Layer.DTO.CartItemDTO;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -37,6 +39,7 @@ namespace API.Controllers
 
             return Ok(result);
         }
+
 
         [HttpPost("update-cart")]
         public async Task<IActionResult> UpdateCart([FromBody] UpdateCartItemDTO updateCartItemDto)

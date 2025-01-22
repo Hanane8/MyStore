@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
             try
@@ -40,6 +40,7 @@ namespace API.Controllers
                 return StatusCode(500, new { message = "An error occurred", error = ex.Message });
             }
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(Guid id)
         {
