@@ -36,7 +36,7 @@ namespace Application_Layer.Commands.OrderCommands
                     return OperationResult<Guid>.Failure("CartItems cannot be empty.");
                 }
 
-                var newOrder = _mapper.Map<Order>(checkout);
+                var newOrder = new Order
                 {
                     UserId = cart.UserId,
                     CartId = cart.Id,

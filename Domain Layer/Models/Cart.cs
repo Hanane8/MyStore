@@ -15,7 +15,7 @@ namespace Domain_Layer.Models
         public List<CartItem> Items { get; set; } = new List<CartItem>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public decimal TotalPrice => Items.Sum(item => item.TotalPrice);
-        public int? SessionId { get; set; }
+       
         public Order? Order { get; set; }
     }
 }
