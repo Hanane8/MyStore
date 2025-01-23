@@ -19,6 +19,7 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
+
         [HttpPost("add-to-cart")]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartDTO addToCartDto)
         {

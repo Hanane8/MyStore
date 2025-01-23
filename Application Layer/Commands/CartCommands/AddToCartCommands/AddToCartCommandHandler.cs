@@ -3,8 +3,8 @@ using AutoMapper;
 using Domain_Layer.Models;
 using Domain_Layer.OperationResultCommand;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,17 +16,23 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
         private readonly ICartRepository _cartRepository;
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AddToCartCommandHandler(ICartRepository cartRepository, IMapper mapper, IGenericRepository<Product> productRepository)
+        public AddToCartCommandHandler(
+            ICartRepository cartRepository,
+            IMapper mapper,
+            IGenericRepository<Product> productRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _cartRepository = cartRepository;
             _mapper = mapper;
             _productRepository = productRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<OperationResult<Guid>> Handle(AddToCartCommand request, CancellationToken cancellationToken)
         {
-            var cartItemDto = request.CartItem;
+            var userId = request.CartItem.UserId;
 
             Cart? cart = null;
 
@@ -63,8 +69,8 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
 
             if (existingItem != null)
             {
-                existingItem.Quantity += cartItemDto.Quantity;
-                existingItem.SetTotalPrice();
+                cartItem.Quantity += request.CartItem.Quantity;
+                cartItem.SetTotalPrice();
             }
             else
             {

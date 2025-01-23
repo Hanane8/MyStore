@@ -40,7 +40,7 @@ namespace Application_Layer.Queries.UserQueries.LoginUser
                 return OperationResult<LoginUserResultDto>.Failure("Felaktig lösenord.");
             }
 
-            var token = await _userRepository.GenerateJwtTokenAsync(user, _tokenHelper);
+            var token = await _userRepository.GenerateJwtTokenAsync(user);
             var result = new LoginUserResultDto
             {
                 Token = token,
