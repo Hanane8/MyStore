@@ -53,28 +53,12 @@ namespace Application_Layer.Helpers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-
-            // Generera nyckeln
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-            // Använd korrekt algoritm
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            // Skapa JWT-token
-            var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
 
         // Validate the token
         public ClaimsPrincipal? ValidateJwtToken(string token)
@@ -120,6 +104,5 @@ namespace Application_Layer.Helpers
 
             return jwtToken.Claims.ToDictionary(c => c.Type, c => c.Value);
         }
-
     }
 }

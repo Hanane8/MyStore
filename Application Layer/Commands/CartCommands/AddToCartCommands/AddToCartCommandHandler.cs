@@ -34,58 +34,44 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
         {
             var userId = request.CartItem.UserId;
 
-            // Kontrollera om produkten finns
-            var product = await _productRepository.GetByIdAsync(cartItemDto.ProductId, cancellationToken);
+            if (string.IsNullOrEmpty(userId))
+            {
+                userId = _httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return OperationResult<Guid>.Failure("User is not authenticated.");
+            }
+
+            var cart = await _cartRepository.GetCartByUserIdAsync(userId, cancellationToken)
+                        ?? new Cart { UserId = userId };
+
+            var product = await _productRepository.GetByIdAsync(request.CartItem.ProductId, cancellationToken);
+
             if (product == null)
             {
-                return OperationResult<Guid>.Failure("Produkten finns inte.");
+                return OperationResult<Guid>.Failure("Product not found.");
             }
 
-            // Kontrollera lagerstatus
-            if (product.Stock < cartItemDto.Quantity)
-            {
-                return OperationResult<Guid>.Failure("Produkten finns inte tillräckligt i lager.");
-            }
+            var cartItem = cart.Items.FirstOrDefault(i => i.ProductId == product.Id);
 
-            // Kontrollera om användar-ID är giltigt
-            if (string.IsNullOrEmpty(cartItemDto.UserId))
-            {
-                return OperationResult<Guid>.Failure("Ogiltigt användar-ID.");
-            }
-
-            // Hämta eller skapa varukorg
-            var cart = await _cartRepository.GetCartByUserIdAsync(cartItemDto.UserId, cancellationToken);
-            if (cart == null)
-            {
-                cart = new Cart
-                {
-                    UserId = cartItemDto.UserId,
-                    Items = new List<CartItem>()
-                };
-                await _cartRepository.AddCartAsync(cart, cancellationToken);
-            }
-
-            // Lägg till eller uppdatera artikel i varukorgen
-            var existingItem = cart.Items.FirstOrDefault(item => item.ProductId == cartItemDto.ProductId);
-            if (existingItem != null)
+            if (cartItem != null)
             {
                 cartItem.Quantity += request.CartItem.Quantity;
                 cartItem.SetTotalPrice();
             }
             else
             {
-                var newCartItem = _mapper.Map<CartItem>(cartItemDto);
-                newCartItem.UnitPrice = product.Price;
-                newCartItem.Size = product.Size;
-                newCartItem.SetTotalPrice();
-                cart.Items.Add(newCartItem);
+                cart.Items.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    Quantity = request.CartItem.Quantity,
+                    UnitPrice = product.Price,
+                    CartId = cart.Id
+                });
             }
 
-            // Uppdatera lagret
-            product.Stock -= cartItemDto.Quantity;
-
-            // Spara ändringar
-            //await _productRepository.UpdateAsync(product, cancellationToken);
             await _cartRepository.SaveChangesAsync(cancellationToken);
 
             return OperationResult<Guid>.Successfull(cart.Id);
