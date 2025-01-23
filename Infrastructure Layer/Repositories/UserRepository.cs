@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure_Layer.Repositories
 {
@@ -18,13 +20,17 @@ namespace Infrastructure_Layer.Repositories
         private readonly SignInManager<User> _signInManager;
         private readonly DatabaseContext _dbContext;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly TokenHelper _tokenHelper;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, DatabaseContext dbContext, PasswordHasher<User> passwordHasher)
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, DatabaseContext dbContext, PasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
+
+            // Use IConfiguration to initialize TokenHelper
+            _tokenHelper = new TokenHelper(configuration, userManager);
         }
 
         public async Task<IdentityResult> CreateUserAsync(User newuser, string password)
@@ -35,11 +41,10 @@ namespace Infrastructure_Layer.Repositories
             }
 
             var result = await _userManager.CreateAsync(newuser, password);
-            
-            
+
             return result;
         }
-       
+
         public async Task<User?> FindByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
@@ -54,18 +59,45 @@ namespace Infrastructure_Layer.Repositories
             return result.Succeeded;
         }
 
-        public async Task<string> GenerateJwtTokenAsync(User user, TokenHelper tokenHelper)
+        public async Task<string> GenerateJwtTokenAsync(User user)
         {
-            return await tokenHelper.GenerateJwtTokenAsync(user);
+            return await _tokenHelper.GenerateJwtTokenAsync(user);
         }
+
         public async Task<User?> GetUserByTokenAsync(string token)
         {
-            if (token == null)
+            if (string.IsNullOrEmpty(token))
             {
                 throw new ArgumentNullException(nameof(token));
             }
 
-            var user = await _userManager.FindByLoginAsync("Token", token);
+            // Validate the token and extract claims
+            var claimsPrincipal = _tokenHelper.ValidateJwtToken(token);
+
+            if (claimsPrincipal == null)
+            {
+                Console.WriteLine("Token validation failed.");
+                return null;
+            }
+
+            var userId = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                Console.WriteLine("User ID not found in token claims.");
+                return null;
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                Console.WriteLine($"User found: {user.Id}");
+            }
+            else
+            {
+                Console.WriteLine("User not found");
+            }
+
             return user;
         }
 

@@ -57,8 +57,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("logout")]
-        public IActionResult Logout()
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
         {
             var tokenAuth = Request.Headers["Authorization"].ToString();
 
@@ -69,9 +69,22 @@ namespace API.Controllers
 
             var token = tokenAuth.Substring("Bearer ".Length).Trim();
 
-            return Ok(new { message = "You have successfully logged out." });
-        }
+            // Log the token for debugging purposes
+            Console.WriteLine($"Token: {token}");
 
+            var result = await _mediator.Send(new LogoutUserQuery { Token = token });
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(new { message = result.Message });
+            }
+            else
+            {
+                // Log the error message for debugging purposes
+                Console.WriteLine($"Error: {result.ErrorMessage}");
+                return BadRequest(new { message = result.ErrorMessage });
+            }
+        }
 
     }
 }
