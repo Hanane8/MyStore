@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application_Layer.Commands.CartCommands.AddToCartCommands
@@ -34,39 +34,39 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
         {
             var userId = request.CartItem.UserId;
 
-            Cart? cart = null;
-
-            if (!string.IsNullOrEmpty(cartItemDto.UserId))
+            // Kontrollera om produkten finns
+            var product = await _productRepository.GetByIdAsync(cartItemDto.ProductId, cancellationToken);
+            if (product == null)
             {
-                cart = await _cartRepository.GetCartByUserIdAsync(cartItemDto.UserId, cancellationToken);
-            }
-            else if (!string.IsNullOrEmpty(cartItemDto.SessionId.ToString()))
-
-            {
-                cart = await _cartRepository.GetCartBySessionIdAsync(cartItemDto.SessionId??0, cancellationToken);
+                return OperationResult<Guid>.Failure("Produkten finns inte.");
             }
 
+            // Kontrollera lagerstatus
+            if (product.Stock < cartItemDto.Quantity)
+            {
+                return OperationResult<Guid>.Failure("Produkten finns inte tillräckligt i lager.");
+            }
+
+            // Kontrollera om användar-ID är giltigt
+            if (string.IsNullOrEmpty(cartItemDto.UserId))
+            {
+                return OperationResult<Guid>.Failure("Ogiltigt användar-ID.");
+            }
+
+            // Hämta eller skapa varukorg
+            var cart = await _cartRepository.GetCartByUserIdAsync(cartItemDto.UserId, cancellationToken);
             if (cart == null)
             {
                 cart = new Cart
                 {
                     UserId = cartItemDto.UserId,
-                    SessionId = cartItemDto.SessionId
+                    Items = new List<CartItem>()
                 };
                 await _cartRepository.AddCartAsync(cart, cancellationToken);
             }
-            else
-            {
-               
-                if (string.IsNullOrEmpty(cart.UserId) && !string.IsNullOrEmpty(cartItemDto.UserId))
-                {
-                    cart.UserId = cartItemDto.UserId;
-                }
-            }
 
-            var existingItem = cart.Items.FirstOrDefault(
-                item => item.ProductId == cartItemDto.ProductId);
-
+            // Lägg till eller uppdatera artikel i varukorgen
+            var existingItem = cart.Items.FirstOrDefault(item => item.ProductId == cartItemDto.ProductId);
             if (existingItem != null)
             {
                 cartItem.Quantity += request.CartItem.Quantity;
@@ -74,11 +74,6 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             }
             else
             {
-                var product = await _productRepository.GetByIdAsync(cartItemDto.ProductId, cancellationToken);
-                if (product == null)
-                {
-                    throw new Exception("Produkten kunde inte hittas.");
-                }
                 var newCartItem = _mapper.Map<CartItem>(cartItemDto);
                 newCartItem.UnitPrice = product.Price;
                 newCartItem.Size = product.Size;
@@ -86,6 +81,11 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
                 cart.Items.Add(newCartItem);
             }
 
+            // Uppdatera lagret
+            product.Stock -= cartItemDto.Quantity;
+
+            // Spara ändringar
+            //await _productRepository.UpdateAsync(product, cancellationToken);
             await _cartRepository.SaveChangesAsync(cancellationToken);
 
             return OperationResult<Guid>.Successfull(cart.Id);

@@ -27,6 +27,7 @@ namespace Infrastructure_Layer.Repositories
                     .FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
             }
 
+
             //public async Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken)
             //{
             //    return await _dbContext.Carts
@@ -34,12 +35,34 @@ namespace Infrastructure_Layer.Repositories
             //        .FirstOrDefaultAsync(c => c.SessionId == sessionId, cancellationToken);
             //}
 
-            public async Task AddCartAsync(Cart cart, CancellationToken cancellationToken)
+        //public async Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken)
+        //{
+        //    return await _dbContext.Carts
+        //        .Include(c => c.Items)
+        //        .FirstOrDefaultAsync(c => c.SessionId == sessionId, cancellationToken);
+        //}
+
+        public async Task AddCartAsync(Cart cart, CancellationToken cancellationToken)
+        {
+            // Check if the user exists
+            var userExists = await _dbContext.Users.AnyAsync(u => u.Id == cart.UserId, cancellationToken);
+            if (!userExists)
             {
-                await _dbContext.Carts.AddAsync(cart, cancellationToken);
+                throw new InvalidOperationException("User does not exist.");
             }
 
-            public async Task SaveChangesAsync(CancellationToken cancellationToken)
+            // Check if the cart already exists
+            var cartExists = await _dbContext.Carts.AnyAsync(c => c.Id == cart.Id, cancellationToken);
+            if (cartExists)
+            {
+                throw new InvalidOperationException("Cart already exists.");
+            }
+
+            await _dbContext.Carts.AddAsync(cart, cancellationToken);
+            await SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
             {
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
