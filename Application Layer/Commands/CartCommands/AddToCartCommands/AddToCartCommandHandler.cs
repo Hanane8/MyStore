@@ -47,6 +47,11 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             var cart = await _cartRepository.GetCartByUserIdAsync(userId, cancellationToken)
                         ?? new Cart { UserId = userId };
 
+            if (cart.Id == Guid.Empty)
+            {
+                await _cartRepository.AddCartAsync(cart, cancellationToken); 
+            }
+
             var product = await _productRepository.GetByIdAsync(request.CartItem.ProductId, cancellationToken);
 
             if (product == null)
@@ -63,18 +68,24 @@ namespace Application_Layer.Commands.CartCommands.AddToCartCommands
             }
             else
             {
-                cart.Items.Add(new CartItem
+                var newCartItem = new CartItem
                 {
                     ProductId = product.Id,
                     Quantity = request.CartItem.Quantity,
                     UnitPrice = product.Price,
-                    CartId = cart.Id
-                });
+                    CartId = cart.Id,
+                    Size = product.Size,
+                    ImageUrl = product.ImageUrl,
+                };
+                newCartItem.SetTotalPrice();  
+                cart.Items.Add(newCartItem);
             }
+
 
             await _cartRepository.SaveChangesAsync(cancellationToken);
 
             return OperationResult<Guid>.Successfull(cart.Id);
         }
+
     }
 }
