@@ -1,5 +1,6 @@
 ﻿using Application_Layer.Commands.UserCommands.RegisterUser;
 using Application_Layer.DTO.UserDto;
+using Application_Layer.Queries.UserQueries.GetUserById;
 using Application_Layer.Queries.UserQueries.LoginUser;
 using Application_Layer.Queries.UserQueries.LogoutUser;
 using FluentValidation;
@@ -69,7 +70,6 @@ namespace API.Controllers
 
             var token = tokenAuth.Substring("Bearer ".Length).Trim();
 
-            // Log the token for debugging purposes
             Console.WriteLine($"Token: {token}");
 
             var result = await _mediator.Send(new LogoutUserQuery { Token = token });
@@ -80,10 +80,23 @@ namespace API.Controllers
             }
             else
             {
-                // Log the error message for debugging purposes
                 Console.WriteLine($"Error: {result.ErrorMessage}");
                 return BadRequest(new { message = result.ErrorMessage });
             }
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserById(Guid userId)
+        {
+            var query = new GetUserByIdQuery(userId);
+            var result = await _mediator.Send(query);
+
+            if (!result.IsSuccessfull)
+            {
+                return NotFound(result.ErrorMessage);
+            }
+
+            return Ok(result);
         }
 
     }
