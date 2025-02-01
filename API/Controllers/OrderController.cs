@@ -1,5 +1,7 @@
 ﻿using Application_Layer.Commands.OrderCommands;
 using Application_Layer.Queries.OrderQueries;
+using Application_Layer.Queries.OrderQueries.GetOrderById;
+using Application_Layer.Queries.OrderQueries.GetOrderByUserId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -64,6 +66,26 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetOrdersByUserId(Guid userId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetOrdersByUserIdQuery(userId));
 
+                if (result.IsSuccessfull && result.Data != null && result.Data.Any())
+                {
+                    return Ok(result.Data);
+                }
+                else
+                {
+                    return NotFound(new { message = "No orders found for the given user." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred", error = ex.Message });
+            }
+        }
     }
 }

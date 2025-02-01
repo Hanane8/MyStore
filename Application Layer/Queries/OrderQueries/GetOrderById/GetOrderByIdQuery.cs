@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.Queries.OrderQueries
+namespace Application_Layer.Queries.OrderQueries.GetOrderById
 {
     public class GetOrderByIdQuery : IRequest<OperationResult<OrderDto>>
     {

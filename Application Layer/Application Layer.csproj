@@ -32,7 +32,6 @@
   <ItemGroup>
     <Folder Include="Commands\UserCommands\DeleteUser\" />
     <Folder Include="Commands\UserCommands\UpdateUser\" />
-    <Folder Include="Queries\UserQueries\GetUserById\" />
   </ItemGroup>
 
 </Project>
