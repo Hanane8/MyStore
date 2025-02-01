@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application_Layer.Queries.UserQueries.GetUserById
+namespace Application_Layer.Commands.UserCommands.UpdateUser
 {
-    internal class GetUserByIdQueryHandler
+    internal class UpdateUserCommand
     {
     }
 }
