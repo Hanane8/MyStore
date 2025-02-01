@@ -1,4 +1,5 @@
-﻿using Application_Layer.DTO.CartDTO;
+﻿using Application_Layer.DTO;
+using Application_Layer.DTO.CartDTO;
 using Application_Layer.DTO.CartItemDTO;
 using Application_Layer.DTO.ClothingTypeDTO;
 using Application_Layer.DTO.OrderDTO;
@@ -71,7 +72,21 @@ namespace Application_Layer.AutoMapper
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.TotalPrice, opt => opt.Ignore());
 
+            CreateMap<Order, OrderDto>()
+                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                 .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => src.OrderDate))
+                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.OrderStatus))
+                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.OrderItems))
+                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount));
 
+            CreateMap<OrderItem, OrderItemDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId))
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.UnitPrice));
         }
     }
             

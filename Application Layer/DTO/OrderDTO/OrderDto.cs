@@ -12,7 +12,7 @@ namespace Application_Layer.DTO
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public DateTime OrderDate { get; set; }= DateTime.Now;
-        public string? Status { get; set; } = "Pending"; 
+        public string? Status { get; set; }  
         public List<OrderItemDTO>? Items { get; set; }
         public decimal TotalAmount => Items.Sum(i => i.Price * i.Quantity); 
     }
