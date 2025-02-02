@@ -1,4 +1,5 @@
 ﻿using Application_Layer.Commands.UserCommands.RegisterUser;
+using Application_Layer.Commands.UserCommands.UpdateUser;
 using Application_Layer.DTO.UserDto;
 using Application_Layer.Queries.UserQueries.GetUserById;
 using Application_Layer.Queries.UserQueries.LoginUser;
@@ -16,11 +17,13 @@ namespace API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly RegisterUserCommandValidator _validator;
+        private readonly UpdateUserCommandValidator _updateValidator;
 
-        public UserController(IMediator mediator, RegisterUserCommandValidator validator)
+        public UserController(IMediator mediator, RegisterUserCommandValidator validator, UpdateUserCommandValidator updateValidator)
         {
             _mediator = mediator;
             _validator = validator;
+            _updateValidator = updateValidator;
         }
 
         [HttpPost("register")]
@@ -86,7 +89,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById(Guid userId)
+        public async Task<IActionResult> GetUserById(string userId)
         {
             var query = new GetUserByIdQuery(userId);
             var result = await _mediator.Send(query);
@@ -98,6 +101,30 @@ namespace API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("{userId}/update")]
+        public async Task<IActionResult> UpdateUser(string userId, [FromBody] UpdateUserDto updateUserDto)
+        {
+            var validationResult = _updateValidator.Validate(updateUserDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
+            var command = new UpdateUserCommand(updateUserDto, userId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccessfull)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+        }
+
+
 
     }
 }

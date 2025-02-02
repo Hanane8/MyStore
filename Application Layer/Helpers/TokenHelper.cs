@@ -36,7 +36,7 @@ namespace Application_Layer.Helpers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.Email?.ToUpper() ?? string.Empty), // Normalize email
+                new Claim(ClaimTypes.Email, user.Email?.ToUpper() ?? string.Empty), 
             };
 
             foreach (var role in roles)

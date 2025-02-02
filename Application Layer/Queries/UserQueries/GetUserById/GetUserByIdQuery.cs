@@ -11,9 +11,9 @@ namespace Application_Layer.Queries.UserQueries.GetUserById
 {
     public class GetUserByIdQuery : IRequest<OperationResult<User>>
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
-        public GetUserByIdQuery(Guid userId)
+        public GetUserByIdQuery(string userId)
         {
             UserId = userId;
         }
