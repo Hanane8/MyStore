@@ -8,7 +8,7 @@ namespace Domain_Layer.Models
 {
     public class CartItem
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public Guid? CartId { get; set; }
         public Cart? Cart { get; set; }
         public Guid ProductId { get; set; }

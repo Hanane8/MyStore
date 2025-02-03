@@ -28,20 +28,6 @@ namespace Infrastructure_Layer.Repositories
             }
 
 
-            //public async Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken)
-            //{
-            //    return await _dbContext.Carts
-            //        .Include(c => c.Items)
-            //        .FirstOrDefaultAsync(c => c.SessionId == sessionId, cancellationToken);
-            //}
-
-        //public async Task<Cart?> GetCartBySessionIdAsync(int sessionId, CancellationToken cancellationToken)
-        //{
-        //    return await _dbContext.Carts
-        //        .Include(c => c.Items)
-        //        .FirstOrDefaultAsync(c => c.SessionId == sessionId, cancellationToken);
-        //}
-
         public async Task AddCartAsync(Cart cart, CancellationToken cancellationToken)
         {
             // Check if the user exists
@@ -50,8 +36,7 @@ namespace Infrastructure_Layer.Repositories
             {
                 throw new InvalidOperationException("User does not exist.");
             }
-
-            // Check if the cart already exists
+                        
             var cartExists = await _dbContext.Carts.AnyAsync(c => c.Id == cart.Id, cancellationToken);
             if (cartExists)
             {
@@ -60,6 +45,11 @@ namespace Infrastructure_Layer.Repositories
 
             await _dbContext.Carts.AddAsync(cart, cancellationToken);
             await SaveChangesAsync(cancellationToken);
+        }
+
+        public void Update(Cart cart)
+        {
+            _dbContext.Carts.Update(cart);
         }
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)

@@ -1,7 +1,8 @@
 ﻿using Application_Layer.Commands.CartCommands.AddToCartCommands;
-using Application_Layer.Commands.CartCommands.UpdateCartCommands;
 using Application_Layer.DTO.CartDTO;
 using Application_Layer.DTO.CartItemDTO;
+using Application_Layer.Queries.CartQueries.GetCartByUserId;
+using Domain_Layer.OperationResultCommand;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -41,21 +42,19 @@ namespace API.Controllers
             return Ok(result);
         }
 
-
-        [HttpPost("update-cart")]
-        public async Task<IActionResult> UpdateCart([FromBody] UpdateCartItemDTO updateCartItemDto)
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetCart(string userId)
         {
-            if (updateCartItemDto == null)
+            if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Invalid request payload.");
+                return BadRequest("UserId is required.");
             }
 
-            var command = new UpdateCartCommand(updateCartItemDto);
-            var result = await _mediator.Send(command);
+            OperationResult<CartDto> result = await _mediator.Send(new GetCartByUserIdQuery(userId));
 
             if (!result.IsSuccessfull)
             {
-                return BadRequest(result.Message);
+                return NotFound(result.Message);
             }
 
             return Ok(result);

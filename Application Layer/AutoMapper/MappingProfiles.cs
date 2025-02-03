@@ -51,7 +51,13 @@ namespace Application_Layer.AutoMapper
 
             CreateMap<AddToCartDTO, CartItem>();
 
-            CreateMap<CartItem, CartItemDto>();
+            CreateMap<CartItem, CartItemDto>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.Id))
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Product.ImageUrl))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.UnitPrice > 0 ? src.UnitPrice : src.Product.Price)) 
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => (src.UnitPrice > 0 ? src.UnitPrice : src.Product.Price) * src.Quantity));
+        
 
             CreateMap<Cart, CartDto>();
 
