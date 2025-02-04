@@ -67,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetOrdersByUserId(Guid userId)
+        public async Task<IActionResult> GetOrdersByUserId(string userId)
         {
             try
             {
@@ -87,5 +87,6 @@ namespace API.Controllers
                 return StatusCode(500, new { message = "An error occurred", error = ex.Message });
             }
         }
+
     }
 }

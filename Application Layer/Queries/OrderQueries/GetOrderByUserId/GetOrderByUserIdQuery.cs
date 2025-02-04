@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application_Layer.Queries.OrderQueries.GetOrderByUserId
 {
-    public class GetOrdersByUserIdQuery : IRequest<OperationResult<IEnumerable<Order>>>
+    public class GetOrdersByUserIdQuery : IRequest<OperationResult<IEnumerable<OrderDto>>>
     {
-        public Guid UserId { get; }
+        public string UserId { get; }
 
-        public GetOrdersByUserIdQuery(Guid userId)
+        public GetOrdersByUserIdQuery(string userId)
         {
             UserId = userId;
         }

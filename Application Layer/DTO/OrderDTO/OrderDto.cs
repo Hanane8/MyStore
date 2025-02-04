@@ -10,7 +10,7 @@ namespace Application_Layer.DTO
     public class OrderDto
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime OrderDate { get; set; }= DateTime.Now;
         public string? Status { get; set; }  
         public List<OrderItemDTO>? Items { get; set; }

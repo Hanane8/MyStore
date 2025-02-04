@@ -9,6 +9,6 @@ namespace Application_Layer.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId, CancellationToken cancellationToken);
     }
 }

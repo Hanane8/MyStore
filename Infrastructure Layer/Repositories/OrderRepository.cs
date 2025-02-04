@@ -19,12 +19,12 @@ namespace Infrastructure_Layer.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _dbContext.Orders
                 .Include(o => o.OrderItems!)
                 .ThenInclude(oi => oi.Product)
-                .Where(o => o.UserId == userId.ToString())
+                .Where(o => o.UserId == userId)
                 .ToListAsync(cancellationToken);
         }
     }
