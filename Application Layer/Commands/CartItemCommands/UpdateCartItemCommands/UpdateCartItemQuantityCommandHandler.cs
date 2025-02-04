@@ -24,10 +24,8 @@ namespace Application_Layer.Commands.CartItemCommands.UpdateCartItemCommands
             if (item == null)
                 return OperationResult<bool>.Failure("Product not found in cart", "Failed to update quantity.");
 
-            // Uppdatera antal
             item.Quantity = request.Quantity;
 
-            // Uppdatera totalpris
             item.SetTotalPrice();
 
             try
